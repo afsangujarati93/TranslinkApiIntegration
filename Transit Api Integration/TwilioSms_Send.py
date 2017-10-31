@@ -3,7 +3,7 @@ from twilio.rest import Client
 from TransApi_GetSchedule import TransApi_GetSchedule
 import json
 
-class TwilioSms:
+class TwilioSms_Send:
     
     cofig_file = open("config.json").read()
     global config_json
