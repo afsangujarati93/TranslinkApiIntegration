@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
-from TwilioSms import TwilioSms
+from TwilioSms_Send import TwilioSms_Send
 
 class Main_test:
-    sms_body = TwilioSms.getSchedule_StopRouteNum() 
-    TwilioSms.twilio_sendSms('+19027041235','+15878033028',sms_body)
+#    sms_body = TwilioSms_Send.getSchedule_StopRouteNum() 
+#    TwilioSms_Send.twilio_sendSms('+19027041235','+15878033028',sms_body)
+    print('Hello World')    
+    route_part = 'route 1234'
+    print(route_part)
+    stop_part = 'stop 99'
+    print(stop_part)
+    route_num = (route_part.replace('route','')).strip()
+    print(route_num)
+    stop_num = (stop_part.replace('stop','')).strip()
+    print(stop_num)
