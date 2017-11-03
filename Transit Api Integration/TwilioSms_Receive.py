@@ -1,67 +1,40 @@
 # -*- coding: utf-8 -*-
-from flask import Flask
 from twilio.twiml.messaging_response import MessagingResponse
 from TwilioSms_Send import TwilioSms_Send
-from flask import request
-import logging 
 import sys
+from Log_Handler import Log_Handler as lh
 
-logger = logging.getLogger(__name__)
-hdlr = logging.FileHandler('myapp.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
-logger.setLevel(logging.DEBUG)
-app = Flask(__name__)
-log = logging.getLogger(__name__)
-
-@app.route("/", methods=['GET', 'POST'])
-def RecivedSMS():
+logger = lh.log_initializer()
+def ReceivedSms(request_form, received_from_num, received_to_num, mess_body):
     try:
-            
-        
-        """Respond to incoming calls with a simple text message."""
-        logger.debug("Before post")
-        if request.method == 'POST':
-            logger.debug("Inside post 1")
-    #        request_values = request.values
-    #        request_args = request.args
-            logger.debug("Before reading form data" + str(request.form))
-            request_form = request.form
-            received_from_num = request.form["From"]
-            received_to_num = request.form["To"]
-            mess_body = request.form["Body"]
-                       
-            logger.debug("Before messaging post 1" + str(request_form))
-            logger.debug("Body and from number and To num. \nFrom:" + received_from_num + "\nTo:" + received_to_num + "\nBody:" + mess_body)
+        """Respond to incoming calls with a simple text message."""           
+        logger.debug("Before messaging post 1" + str(request_form))
+        logger.debug("Body and from number and To num. \nFrom:" + received_from_num + "\nTo:" + received_to_num + "\nBody:" + mess_body)
 
-    #        make all string lower case
-            has_route = 'route' in mess_body
-            has_stop = 'stop' in mess_body
-            if not (has_route and has_stop):
-                resp = MessagingResponse()
-                resp.message("Invalid text input. Please make sure you have send <b>route</b> and <b>stop</b> in your text")
-            else:
-                index_stop = mess_body.index('stop')
-                route_part = mess_body[:index_stop]
-                stop_part= mess_body[index_stop:]
-                logger.debug("Route Part:" + route_part + "|stop_part:" + stop_part)
-                route_num = (route_part.replace('route','')).strip()
-                stop_num = (stop_part.replace('stop','')).strip()
-                              
-                logger.debug("Route Num:" + route_num + "|Stop Num:" + stop_num)
-                schedules = TwilioSms_Send.getSchedule_StopRouteNum(route_num, stop_num)
-                logger.debug('schedules:' + schedules)
-                resp = MessagingResponse()
-                resp.message(schedules)
-        else:
+#        make all string lower case
+        has_route = 'route' in mess_body
+        has_stop = 'stop' in mess_body
+        if not (has_route and has_stop):
             resp = MessagingResponse()
-            resp.message("Invalid request received from server")  
+            resp.message("Invalid text input. Please make sure you have send <b>route</b> and <b>stop</b> in your text")
+        else:
+            index_stop = mess_body.index('stop')
+            route_part = mess_body[:index_stop]
+            stop_part= mess_body[index_stop:]
+            logger.debug("Route Part:" + route_part + "|stop_part:" + stop_part)
+            route_num = (route_part.replace('route','')).strip()
+            stop_num = (stop_part.replace('stop','')).strip()
+                          
+            logger.debug("Route Num:" + route_num + "|Stop Num:" + stop_num)
+            schedules = TwilioSms_Send.getSchedule_StopRouteNum(route_num, stop_num)
+            logger.debug('schedules:' + schedules)
+            resp = MessagingResponse()
+            resp.message(schedules)
+      
         logger.debug("Before return response")
         return str(resp)
     except:
+#        imrpove exception handling
         logger.debug("Exception occurred while Receving or Sending SMS request ", sys.exc_info()[0])
 
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=80)
-
+    return str(resp)

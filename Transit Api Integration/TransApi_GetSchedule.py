@@ -1,18 +1,10 @@
 # -*- coding: utf-8 -*-
 import requests
 from xml.etree import ElementTree
-import logging 
-from flask import Flask
 import json
+from Log_Handler import Log_Handler as lh
 
-logger = logging.getLogger(__name__)
-hdlr = logging.FileHandler('myapp.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
-logger.setLevel(logging.DEBUG)
-app = Flask(__name__)
-log = logging.getLogger(__name__)
+logger = lh.log_initializer()
 
 class TransApi_GetSchedule:
     
@@ -21,6 +13,7 @@ class TransApi_GetSchedule:
     config_json = json.loads(cofig_file)    
     #a method is contained inside a class
     #a function is what that is independent of a class
+    #so main_get.... is a method
     def main_getScheduleResponse(stop_number, route_number): 
         api_key = config_json['TranslinkApi']['apiKey']
         logger.debug('Inside Main Schedule Response')
