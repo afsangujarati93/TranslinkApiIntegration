@@ -1,25 +1,30 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
-from twilio.twiml.voice_response import VoiceResponse
-import logging
+from twilio.twiml.voice_response import VoiceResponse, Gather
+from Log_Handler import Log_Handler as lh
 
-logger = logging.getLogger(__name__)
-hdlr = logging.FileHandler('myapp.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
-logger.setLevel(logging.DEBUG)
-#app = Flask(__name__)
-log = logging.getLogger(__name__)
+app = Flask(__name__)
+logger = lh.log_initializer()
 
-#@app.route("/CallResponse", methods=['GET', 'POST'])
-def hello_monkey():
+def ReceivedRouteCall():
     """Respond to incoming requests."""
     resp = VoiceResponse()
-    resp.say("Hello Monkey")
-
+    resp.say("Hello Monkey",  voice='alice')    
+    # Say a command, and listen for the caller to press a key. When they press
+    # a key, redirect them to /RecordInputSchedule.
+    logger.debug('Starting call receiving process|name:' + __name__ )
+    route_num = Gather(action="/RecordInputSchedule", method="POST")    
+    route_num.say("Please press the route number.",  voice='alice')
+    resp.append(route_num)
+    logger.debug("Before return in route call")    
     return str(resp)
 
-#if __name__ == "__main__":
-#    logger.debug("In call main")
-#    app.run(debug=True, host='0.0.0.0', port=80)
+def ReceivedStopCall():
+    """Respond to incoming requests."""
+    resp = VoiceResponse()
+    resp.say("Hello Monkey",  voice='alice')
+    logger.debug("Inside Received Stop Call method")
+    stop_num = Gather(action="/RecordInputSchedule", method="POST")   
+    stop_num.say("Please press the stop number.",  voice='alice')
+    resp.append(stop_num)
+    return str(resp)

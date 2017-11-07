@@ -10,11 +10,12 @@ class TransApi_GetSchedule:
     
     cofig_file = open("config.json").read()
     global config_json
-    config_json = json.loads(cofig_file)    
+    config_json = json.loads(cofig_file)       
     #a method is contained inside a class
     #a function is what that is independent of a class
     #so main_get.... is a method
     def main_getScheduleResponse(stop_number, route_number): 
+        return_list = []
         api_key = config_json['TranslinkApi']['apiKey']
         logger.debug('Inside Main Schedule Response')
         str_url = "http://api.translink.ca/rttiapi/v1/stops/{0}/estimates?apikey={1}&count=3&timeframe=120"
@@ -25,12 +26,18 @@ class TransApi_GetSchedule:
         
         if resp.status_code != 200:
             # This means something went wrong.
-            raise Exception('Invalid response from web service')            
-            logger.debug('After getting data:' + resp.content + '|code' + resp.status_code)
+#            raise Exception('Invalid response from web service')            
+            schedules = "Unable to fetch schedules for the given route and stop number. Please check the route and stop number and retry."
+            logger.debug('After getting data:' + str(resp.content) + '|code' + str(resp.status_code))
+            return_list.append(schedules)
+            return_list.append(False)
+            return return_list
         logger.debug("Before parsing:")
         schedules = TransApi_GetSchedule.parse_getSchduleResponse(resp.content, route_number)        
         logger.debug('After Parsing')
-        return schedules
+        return_list.append(schedules)
+        return_list.append(True)
+        return return_list
             
     
     def parse_getSchduleResponse(api_content,route_number):
@@ -44,3 +51,16 @@ class TransApi_GetSchedule:
                 for perschedule in schedules_list:
                     expected_leave_time.append("\n" + perschedule.find('ExpectedLeaveTime').text)
         return expected_leave_time
+    
+    
+    def getSchedule_StopRouteNum(route_num, stop_num):
+        logger.debug('Inside Schdule Get Method')
+        return_list = TransApi_GetSchedule.main_getScheduleResponse(stop_num, route_num)
+        if return_list[1]:
+            schedule_detail = "Following is the schedule for " + stop_num + " and route number " + route_num + "\nThe latest schedule for your request: \n" + "\n".join(return_list[0])
+            schedule_detail += "\nWith Love From GJ"
+        else:
+            schedule_detail = return_list[0]  
+        
+        logger.debug('After schdules:' + schedule_detail)
+        return schedule_detail   

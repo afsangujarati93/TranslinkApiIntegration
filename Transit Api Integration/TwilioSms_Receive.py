@@ -3,6 +3,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from TwilioSms_Send import TwilioSms_Send
 import sys
 from Log_Handler import Log_Handler as lh
+from TransApi_GetSchedule import TransApi_GetSchedule
 
 logger = lh.log_initializer()
 def ReceivedSms(request_form, received_from_num, received_to_num, mess_body):
@@ -26,7 +27,7 @@ def ReceivedSms(request_form, received_from_num, received_to_num, mess_body):
             stop_num = (stop_part.replace('stop','')).strip()
                           
             logger.debug("Route Num:" + route_num + "|Stop Num:" + stop_num)
-            schedules = TwilioSms_Send.getSchedule_StopRouteNum(route_num, stop_num)
+            schedules = TransApi_GetSchedule.getSchedule_StopRouteNum(route_num, stop_num)
             logger.debug('schedules:' + schedules)
             resp = MessagingResponse()
             resp.message(schedules)
