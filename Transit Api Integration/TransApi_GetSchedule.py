@@ -35,8 +35,13 @@ class TransApi_GetSchedule:
         logger.debug("Before parsing:")
         schedules = TransApi_GetSchedule.parse_getSchduleResponse(resp.content, route_number)        
         logger.debug('After Parsing')
-        return_list.append(schedules)
-        return_list.append(True)
+        if not schedules:
+            schedules = "Unable to fetch schedules for the given route and stop number. Please check the route and stop number and retry."
+            return_list.append(schedules)
+            return_list.append(False)
+        else:
+            return_list.append(schedules)
+            return_list.append(True)
         return return_list
             
     

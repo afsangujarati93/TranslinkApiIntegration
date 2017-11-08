@@ -13,6 +13,7 @@ logger = lh.log_initializer()
 counter = 1
 route_num = 0
 stop_num= 0
+
 @app.route("/SmsResponse", methods=['GET', 'POST'])
 def RecivedSms():
     if request.method == 'POST':
@@ -42,25 +43,49 @@ def ReceivedCall():
 def UserInputSchedule():
     global counter
     global stop_num
+    global route_num
+    isDigit = True
     """Handle key press from a user."""
     # Get the digit pressed by the user
-    logger.debug('before considering user input in route')
+    logger.debug('before considering user input in route|')
     
+    digit_val = request.values.get('Digits', None)
+    logger.debug("request Form" + str(request.form))
+    if not digit_val:
+        isDigit = False
+    logger.debug("isDigit:" + str(isDigit))
+    resp = VoiceResponse()
     if counter == 1:
-        global route_num
-        global input_word
-        route_num = request.values.get('Digits', None)
+        if isDigit:
+            route_num = request.values.get('Digits', None)
+            logger.debug("User first digit input:" +  str(route_num))
+        else:
+            route_num = request.values['SpeechResult']
+#            route_num = request.values.get('SpeechResult', None)
+            logger.debug("User first speech input:" +  str(route_num) + "| has digit: " + str(route_num.isdigit()))
+            if not route_num.isdigit():
+                resp = VoiceResponse()
+                resp.say("Invalid route number. Please press or say a proper route number",  voice='alice')
+                return redirect("/CallResponse")       
         counter += 1
         return redirect("/CallResponse")
-    elif counter == 2:         
-        stop_num = request.values.get('Digits', None)
-        logger.debug("stop:" + str(stop_num) + "|route:" + str(route_num))
+    elif counter == 2:
+        if isDigit:
+            stop_num = request.values.get('Digits', None)
+        else:
+            stop_num = request.values['SpeechResult']
+            logger.debug("User second speech input:" +  str(stop_num) + "| has digit: " + str(stop_num.isdigit()))
+            if not stop_num.isdigit():
+                resp = VoiceResponse()
+                resp.say("Invalid stop number. Please press or say a proper route number", voice='alice')
+                return redirect("/CallResponse")  
+        resp.say("Fetching schedules for route number:" + str(route_num) + "and stop number:" + str(stop_num), voice='alice')
         schedules = TransApi_GetSchedule.getSchedule_StopRouteNum(route_num, stop_num)
         logger.debug('before replace schedules:' + schedules)
 #        schedules.replace("\n", "...........")
         schedules = " .................................... ".join(schedules.splitlines())
         logger.debug('after replace schedules:' + schedules)
-        resp = VoiceResponse()
+       
         resp.say(schedules,  voice='alice')
         resp.pause()
         resp.hangup()

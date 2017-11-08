@@ -13,8 +13,8 @@ def ReceivedRouteCall():
     # Say a command, and listen for the caller to press a key. When they press
     # a key, redirect them to /RecordInputSchedule.
     logger.debug('Starting call receiving process|name:' + __name__ )
-    route_num = Gather(action="/RecordInputSchedule", method="POST")    
-    route_num.say("Please press the route number.",  voice='alice')
+    route_num = Gather(action="/RecordInputSchedule", method="POST", input = "DTMF Speech")    
+    route_num.say("Please press or say the route number, followed by # key",  voice='alice')
     resp.append(route_num)
     logger.debug("Before return in route call")    
     return str(resp)
@@ -24,7 +24,7 @@ def ReceivedStopCall():
     resp = VoiceResponse()
     resp.say("Hello Monkey",  voice='alice')
     logger.debug("Inside Received Stop Call method")
-    stop_num = Gather(action="/RecordInputSchedule", method="POST")   
-    stop_num.say("Please press the stop number.",  voice='alice')
+    stop_num = Gather(action="/RecordInputSchedule", method="POST", input = "DTMF Speech")   
+    stop_num.say("Please press or say the stop number, followed by # key",  voice='alice')
     resp.append(stop_num)
     return str(resp)
