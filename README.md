@@ -1,8 +1,8 @@
 # TranslinkApiIntegration
 
-# Project Title
+Creating a project to integrate the translink Api that would fetch the schedule of bus on basis of the stop and route number passed to the program. The schedules can be fetched either through the sending a text or calling the designated number. The project is developed only for the purpose for learning purpose and has many factors that needs to be worked on, especially exception handling (which I have intentionally skipped). 
 
-Creating a project to integrate the translink Api that would fetch the schedule of bus on basis of the stop and route number passed to the program. The schedules can be fetched either through the sending a text or calling the designated number. 
+P.S. The project still needs to intergrate the part of taking user route and stop number input in form of speech to mark its completion as per the original objectives.
 
 ## Getting Started
 
