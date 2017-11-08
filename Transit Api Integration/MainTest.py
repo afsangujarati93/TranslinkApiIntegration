@@ -3,7 +3,6 @@ from TwilioSms_Send import TwilioSms_Send
 
 class Main_test:
 #    sms_body = TwilioSms_Send.getSchedule_StopRouteNum() 
-#    TwilioSms_Send.twilio_sendSms('+19027041235','+15878033028',sms_body)
     print('Hello World')    
     route_part = 'route 1234'
     print(route_part)
