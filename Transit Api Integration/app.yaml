@@ -7,7 +7,7 @@ runtime_config:
 
 handlers:
 - url: /SmsResponse
-script: Twilio_Routing.RecivedSms
+  script: Twilio_Routing.RecivedSms
 
 - url: /CallResponse
-script: Twilio_Routing.ReceivedCall
+  script: Twilio_Routing.ReceivedCall
