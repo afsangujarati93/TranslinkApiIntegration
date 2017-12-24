@@ -7,4 +7,4 @@ RUN virtualenv --no-download /env -p python3.6
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 ADD . /app/
-CMD exec gunicorn -b :$PORT main:app
+CMD gunicorn -b :$PORT main:app
