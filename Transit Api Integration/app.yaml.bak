@@ -1,0 +1,13 @@
+runtime: custom
+env: flex
+api_version: 1
+#entrypoint: gunicorn -b :$PORT main:app
+runtime_config:
+    python_version: 3
+
+handlers:
+- url: /SmsResponse
+  script: Twilio_Routing.RecivedSms
+
+- url: /CallResponse
+  script: Twilio_Routing.ReceivedCall

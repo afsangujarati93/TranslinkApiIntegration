@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from twilio.rest import Client
 import json
-import logging 
+#import logging 
 from flask import Flask
 
-logger = logging.getLogger(__name__)
-hdlr = logging.FileHandler('myapp.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
-logger.setLevel(logging.DEBUG)
+#logger = logging.getLogger(__name__)
+#hdlr = logging.FileHandler('myapp.log')
+#formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+#hdlr.setFormatter(formatter)
+#logger.addHandler(hdlr) 
+#logger.setLevel(logging.DEBUG)
 app = Flask(__name__)
-log = logging.getLogger(__name__)
+#log = logging.getLogger(__name__)
 
 class TwilioSms_Send:
     
