@@ -37,7 +37,7 @@ def ReceivedSms(request_form, received_from_num, received_to_num, mess_body):
             resp = MessagingResponse()
             resp.message(schedules)
       
-      	print("Before return response")
+        print("Before return response")
         #logger.debug("Before return response")
         return str(resp)
     except:
