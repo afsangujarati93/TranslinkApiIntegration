@@ -7,12 +7,16 @@ from flask import request
 from twilio.twiml.messaging_response import MessagingResponse
 #from Log_Handler import Log_Handler as lh
 from TransApi_GetSchedule import TransApi_GetSchedule
+import json
 
 app = Flask(__name__)
 #logger = lh.log_initializer()
-counter = 0
 route_num = 0
 stop_num= 0
+
+cofig_file = open("config.json").read()
+global config_json
+config_json = json.loads(cofig_file) 
 
 @app.route("/SmsResponse", methods=['GET', 'POST'])
 def RecivedSms():
@@ -28,8 +32,7 @@ def RecivedSms():
     return str(resp)
 
 @app.route("/CallResponse", methods=['GET', 'POST'])
-def ReceivedCall():
-    global counter
+def ReceivedCall():    
     counter_get = request.args.get('counter', 0) 
     print("counter:" + str(counter_get))
     counter = int(counter_get)
@@ -41,11 +44,15 @@ def ReceivedCall():
 
 
 @app.route("/RecordInputSchedule", methods=['GET', 'POST'])
-def UserInputSchedule():
-    global counter
+def UserInputSchedule():    
     global stop_num
     global route_num
     isDigit = True
+
+    counter_get = request.args.get('counter', 0) 
+    print("counter:" + str(counter_get))
+    counter = int(counter_get)
+
     """Handle key press from a user."""
     # Get the digit pressed by the user
     print('before considering user input in route|')
@@ -107,5 +114,6 @@ def UserInputSchedule():
 
 if __name__ == "__main__":
 #    logger.debug("In routing main")
-    app.run(debug=True, host='0.0.0.0', port=8080, threaded=True)
+    host_ip = config_json['IPAddresses']['hostIP']
+    app.run(debug=True, host=host_ip, port=8080, threaded=True)
 #	app.run(debug=True, threaded=True)
