@@ -6,10 +6,21 @@ from twilio.twiml.voice_response import VoiceResponse, Gather
 app = Flask(__name__)
 #logger = lh.log_initializer()
 
+def ReceivedCallManage(counter):    
+    if counter == 1:
+        print("Main 1st method| counter" + str(counter))
+        #logger.debug("Main 1st method| counter" + str(counter))
+        resp = ReceivedRouteCall()
+    elif counter == 2: 
+        print("Main 2nd method| counter" + str(counter))
+        #logger.debug("Main 2nd method| counter" + str(counter))
+        resp = ReceivedStopCall()
+    return resp
+
 def ReceivedRouteCall():
     """Respond to incoming requests."""
     resp = VoiceResponse()
-    resp.say("Hello Monkey",  voice='alice')    
+    resp.say("Hello Monkey",  voice='alice')
     # Say a command, and listen for the caller to press a key. When they press
     # a key, redirect them to /RecordInputSchedule.
     print('Starting call receiving process|name:' + __name__ )

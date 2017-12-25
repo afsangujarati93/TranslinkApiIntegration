@@ -10,7 +10,7 @@ from TransApi_GetSchedule import TransApi_GetSchedule
 
 app = Flask(__name__)
 #logger = lh.log_initializer()
-counter = 1
+counter = 0
 route_num = 0
 stop_num= 0
 
@@ -29,18 +29,16 @@ def RecivedSms():
 
 @app.route("/CallResponse", methods=['GET', 'POST'])
 def ReceivedCall():
+    global counter
+    counter_get = request.args.get('counter', 0) 
+    print("counter:" + str(counter_get))
+    counter = int(counter_get)
     """Respond to incoming requests."""
     print("Starting ReceivedCall flow| name:" + __name__)
     #logger.debug("Starting ReceivedCall flow| name:" + __name__)
-    if counter == 1:
-        print("Main 1st method| counter" + str(counter))
-        #logger.debug("Main 1st method| counter" + str(counter))
-        resp = tcr.ReceivedRouteCall()
-    elif counter == 2: 
-        print("Main 2nd method| counter" + str(counter))
-        #logger.debug("Main 2nd method| counter" + str(counter))
-        resp = tcr.ReceivedStopCall()   
+    resp = tcr.ReceivedCallManage(counter)
     return str(resp)
+
 
 @app.route("/RecordInputSchedule", methods=['GET', 'POST'])
 def UserInputSchedule():
@@ -74,9 +72,11 @@ def UserInputSchedule():
             if not route_num.isdigit():
                 resp = VoiceResponse()
                 resp.say("Invalid route number. Please press or say a proper route number",  voice='alice')
-                return redirect("/CallResponse")       
-        counter += 1
-        return redirect("/CallResponse")
+                # return redirect("/CallResponse")
+                return tcr.ReceivedCallManage(counter)
+        
+        counter += 1        
+        return tcr.ReceivedCallManage(counter)
     elif counter == 2:
         if isDigit:
             stop_num = request.values.get('Digits', None)
@@ -87,7 +87,9 @@ def UserInputSchedule():
             if not stop_num.isdigit():
                 resp = VoiceResponse()
                 resp.say("Invalid stop number. Please press or say a proper stop number", voice='alice')
-                return redirect("/CallResponse")  
+                # return redirect("/CallResponse")
+                return tcr.ReceivedCallManage(counter)
+              
         resp.say("Fetching schedules for route number:" + str(route_num) + "and stop number:" + str(stop_num), voice='alice')
         schedules = TransApi_GetSchedule.getSchedule_StopRouteNum(route_num, stop_num)
         print('before replace schedules:' + schedules)
