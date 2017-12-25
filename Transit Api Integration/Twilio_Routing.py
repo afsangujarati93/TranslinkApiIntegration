@@ -87,7 +87,8 @@ def UserInputSchedule():
             if not stop_num.isdigit():
                 resp = VoiceResponse()
                 resp.say("Invalid stop number. Please press or say a proper stop number", voice='alice')
-                return redirect("/CallResponse")  
+                return redirect("/CallResponse")
+        counter = 1
         resp.say("Fetching schedules for route number:" + str(route_num) + "and stop number:" + str(stop_num), voice='alice')
         schedules = TransApi_GetSchedule.getSchedule_StopRouteNum(route_num, stop_num)
         print('before replace schedules:' + schedules)
