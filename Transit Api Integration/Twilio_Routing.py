@@ -90,6 +90,7 @@ def UserInputSchedule():
                 # return redirect("/CallResponse")
                 return tcr.ReceivedCallManage(counter)
               
+
         resp.say("Fetching schedules for route number:" + str(route_num) + "and stop number:" + str(stop_num), voice='alice')
         schedules = TransApi_GetSchedule.getSchedule_StopRouteNum(route_num, stop_num)
         print('before replace schedules:' + schedules)
