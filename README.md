@@ -1,12 +1,14 @@
 # TranslinkApiIntegration
 
+Hosted on: http://twilio-translink-api.appspot.com/ (Google App Engine- using flexible environment)
+
 Creating a project to integrate the translink Api that would fetch the schedule of bus on basis of the stop and route number passed to the program. The schedules can be fetched either through the sending a text or calling the designated number. The project is developed only for the purpose for learning purpose and has many factors that needs to be worked on, especially exception handling (which I have intentionally skipped). 
 
 ## Getting Started
 
 *Shift+right click in the folder of ngrok.exe and type the command "ngrok.exe http 80". This will run host your app on port 80.
 *Go to the url http://localhost:4040/status and copy the URL which would be required to configure twilio's programmable sms and calling
-*Paste the url at https://www.twilio.com/console/phone-numbers/incoming followed by the method name. (/CallResponse for voice and /SmsResponse for messages
+*Paste the url at https://www.twilio.com/console/phone-numbers/incoming followed by the method name. (/CallResponse?counter=1 for voice and /SmsResponse for messages
 *Run the Twilio_Routing.py to start the app and start making calls and sms to your twilio number. 
 
 
