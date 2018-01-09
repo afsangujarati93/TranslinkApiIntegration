@@ -23,6 +23,7 @@ I would also recommend you to sign up for a textnow number to work with your tra
 ## Deployment
 
 Follow the steps mentioned in Gettings Started for deploying it on local environment.
+route 004 stop 60980
 
 ## Built With
 
